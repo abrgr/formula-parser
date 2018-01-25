@@ -51,7 +51,7 @@ describe('.parse() math-trig formulas', () => {
   });
 
   it('AGGREGATE', () => {
-    parser.on('callRangeValue', (a, b, done) => {
+    parser.on('callRangeValue', (a, b, _, done) => {
       done([[1, 2, 3]]);
     });
 
@@ -563,7 +563,7 @@ describe('.parse() math-trig formulas', () => {
   });
 
   it('SUBTOTAL', () => {
-    parser.on('callRangeValue', (a, b, done) => {
+    parser.on('callRangeValue', (a, b, _, done) => {
       done([[120, 10, 150, 23]]);
     });
 
@@ -578,7 +578,7 @@ describe('.parse() math-trig formulas', () => {
   });
 
   it('SUMIF', () => {
-    parser.on('callRangeValue', (a, b, done) => {
+    parser.on('callRangeValue', (a, b, _, done) => {
       done([[1, 2, 3]]);
     });
 
@@ -586,7 +586,7 @@ describe('.parse() math-trig formulas', () => {
   });
 
   it('SUMIFS', () => {
-    parser.on('callRangeValue', (a, b, done) => {
+    parser.on('callRangeValue', (a, b, _, done) => {
       done([[1, 2, 3]]);
     });
 
@@ -594,7 +594,7 @@ describe('.parse() math-trig formulas', () => {
   });
 
   it('SUMPRODUCT', () => {
-    parser.on('callRangeValue', (a, b, done) => {
+    parser.on('callRangeValue', (a, b, _, done) => {
       if (a.label === 'A1' && b.label === 'B3') {
         done([[3, 4], [8, 6], [1, 9]]);
       } else if (a.label === 'A4' && b.label === 'B6') {
@@ -613,7 +613,7 @@ describe('.parse() math-trig formulas', () => {
   });
 
   it('SUMX2MY2', () => {
-    parser.on('callRangeValue', (a, b, done) => {
+    parser.on('callRangeValue', (a, b, _, done) => {
       if (a.label === 'A1' && b.label === 'B3') {
         done([[1, 2, 3]]);
       } else if (a.label === 'A4' && b.label === 'B6') {
@@ -625,7 +625,7 @@ describe('.parse() math-trig formulas', () => {
   });
 
   it('SUMX2PY2', () => {
-    parser.on('callRangeValue', (a, b, done) => {
+    parser.on('callRangeValue', (a, b, _, done) => {
       if (a.label === 'A1' && b.label === 'B3') {
         done([[1, 2, 3]]);
       } else if (a.label === 'A4' && b.label === 'B6') {
@@ -637,7 +637,7 @@ describe('.parse() math-trig formulas', () => {
   });
 
   it('SUMXMY2', () => {
-    parser.on('callRangeValue', (a, b, done) => {
+    parser.on('callRangeValue', (a, b, _, done) => {
       if (a.label === 'A1' && b.label === 'B3') {
         done([[1, 2, 3]]);
       } else if (a.label === 'A4' && b.label === 'B6') {

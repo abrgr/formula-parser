@@ -33,7 +33,7 @@ describe('.parse() statistical formulas', () => {
   });
 
   it('AVERAGEIF', () => {
-    parser.on('callRangeValue', (a, b, done) => {
+    parser.on('callRangeValue', (a, b, _, done) => {
       if (a.label === 'A1' && b.label === 'B3') {
         done([[2, 4], [8, 16]]);
       } else if (a.label === 'A4' && b.label === 'B6') {
@@ -45,7 +45,7 @@ describe('.parse() statistical formulas', () => {
   });
 
   it('AVERAGEIFS', () => {
-    parser.on('callRangeValue', (a, b, done) => {
+    parser.on('callRangeValue', (a, b, _, done) => {
       if (a.label === 'A1' && b.label === 'D1') {
         done([2, 4, 8, 16]);
       } else if (a.label === 'A2' && b.label === 'D2') {
@@ -125,7 +125,7 @@ describe('.parse() statistical formulas', () => {
   });
 
   it('COLUMN', () => {
-    parser.on('callRangeValue', (a, b, done) => {
+    parser.on('callRangeValue', (a, b, _, done) => {
       if (a.label === 'A1' && b.label === 'C2') {
         done([[1, 2], [2, 3], [2, 4]]);
       }
@@ -138,7 +138,7 @@ describe('.parse() statistical formulas', () => {
   });
 
   it('COLUMNS', () => {
-    parser.on('callRangeValue', (a, b, done) => {
+    parser.on('callRangeValue', (a, b, _, done) => {
       if (a.label === 'A1' && b.label === 'C2') {
         done([[1, 2], [2, 3], [2, 4]]);
       }
@@ -191,7 +191,7 @@ describe('.parse() statistical formulas', () => {
 
   it('COUNTIF', () => {
     parser.setVariable('foo', [1, null, 3, 'a', '']);
-    parser.on('callRangeValue', (a, b, done) => {
+    parser.on('callRangeValue', (a, b, _, done) => {
       if (a.label === 'A1' && b.label === 'C2') {
         done([[1, null, 3], ['a', 4, 'c']]);
       }
@@ -203,7 +203,7 @@ describe('.parse() statistical formulas', () => {
 
   it('COUNTIFS', () => {
     parser.setVariable('foo', [1, null, 3, 'a', '']);
-    parser.on('callRangeValue', (a, b, done) => {
+    parser.on('callRangeValue', (a, b, _, done) => {
       if (a.label === 'A1' && b.label === 'C2') {
         done([[1, null, 3], ['a', 4, 'c']]);
       }
@@ -648,7 +648,7 @@ describe('.parse() statistical formulas', () => {
   });
 
   it('ROW', () => {
-    parser.on('callRangeValue', (a, b, done) => {
+    parser.on('callRangeValue', (a, b, _, done) => {
       if (a.label === 'A1' && b.label === 'C2') {
         done([[1, 2], [2, 3], [2, 4]]);
       }
@@ -662,7 +662,7 @@ describe('.parse() statistical formulas', () => {
   });
 
   it('ROWS', () => {
-    parser.on('callRangeValue', (a, b, done) => {
+    parser.on('callRangeValue', (a, b, _, done) => {
       if (a.label === 'A1' && b.label === 'C2') {
         done([[1, 2], [2, 3], [2, 4]]);
       }
@@ -759,7 +759,7 @@ describe('.parse() statistical formulas', () => {
   });
 
   it('TRANSPOSE', () => {
-    parser.on('callRangeValue', (a, b, done) => {
+    parser.on('callRangeValue', (a, b, _, done) => {
       if (a.label === 'A1' && b.label === 'C2') {
         done([[1, 2], [3, 4], [5, 6]]);
       } else if (a.label === 'A3' && b.label === 'C3') {

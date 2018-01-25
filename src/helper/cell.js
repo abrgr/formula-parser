@@ -73,7 +73,7 @@ export function columnIndexToLabel(column) {
   return result.toUpperCase();
 }
 
-const LABEL_EXTRACT_REGEXP = /^([$])?([A-Za-z]+)([$])?([0-9]+)$/;
+const LABEL_EXTRACT_REGEXP = /^(['][^']+[']|[A-Za-z_\-][A-Za-z0-9_\-]*)?[!]?([$])?([A-Za-z]+)([$])?([0-9]+)$/;
 
 /**
  * Extract cell coordinates.
@@ -85,20 +85,22 @@ export function extractLabel(label) {
   if (typeof label !== 'string' || !LABEL_EXTRACT_REGEXP.test(label)) {
     return [];
   }
-  const [, columnAbs, column, rowAbs, row] = label.toUpperCase().match(LABEL_EXTRACT_REGEXP);
+  const [, tabRef, columnAbs, column, rowAbs, row] = label.match(LABEL_EXTRACT_REGEXP);
 
-  return [
+  const ret = [
     {
       index: rowLabelToIndex(row),
-      label: row,
+      label: row && row.toUpperCase(),
       isAbsolute: rowAbs === '$',
     },
     {
       index: columnLabelToIndex(column),
-      label: column,
+      label: column && column.toUpperCase(),
       isAbsolute: columnAbs === '$',
     },
   ];
+
+  return tabRef ? ret.concat([tabRef.replace(/^[']|[']$/g, '')]) : ret;
 }
 
 /**
@@ -108,9 +110,10 @@ export function extractLabel(label) {
  * @param {Object} column Object with `index` and `isAbsolute` properties.
  * @returns {String} Returns cell label.
  */
-export function toLabel(row, column) {
+export function toLabel(row, column, tab) {
   const rowLabel = (row.isAbsolute ? '$' : '') + rowIndexToLabel(row.index);
   const columnLabel = (column.isAbsolute ? '$' : '') + columnIndexToLabel(column.index);
+  const label = columnLabel + rowLabel;
 
-  return columnLabel + rowLabel;
+  return tab ? "'" + tab + "'!" + label : label;
 }

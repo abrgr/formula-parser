@@ -29,7 +29,7 @@ describe('.parse() miscellaneous formulas', () => {
   });
 
   it('FLATTEN', () => {
-    parser.on('callRangeValue', (a, b, done) => {
+    parser.on('callRangeValue', (a, b, _, done) => {
       if (a.label === 'A1' && b.label === 'B3') {
         done([[1, 2, [3], [4, 5]]]);
       }
@@ -39,7 +39,7 @@ describe('.parse() miscellaneous formulas', () => {
   });
 
   it('JOIN', () => {
-    parser.on('callRangeValue', (a, b, done) => {
+    parser.on('callRangeValue', (a, b, _, done) => {
       if (a.label === 'A1' && b.label === 'B3') {
         done([[1, 2, [3], [4, 5]]]);
       }

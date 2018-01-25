@@ -232,7 +232,7 @@ describe('Parser', () => {
     });
 
     it('should return value under specified coordinates', () => {
-      parser.on('callRangeValue', (firstCell, lastCell, done) => {
+      parser.on('callRangeValue', (firstCell, lastCell, _, done) => {
         const {row: row1, column: column1} = firstCell;
         const {row: row2, column: column2} = lastCell;
         let value;
@@ -275,7 +275,7 @@ describe('Parser', () => {
         label: 'B$9',
       };
 
-      expect(cb).toHaveBeenCalledWith(startCell, endCell, expect.anything());
+      expect(cb).toHaveBeenCalledWith(startCell, endCell, void 0, expect.anything());
     });
 
     it('should convert coordinates in top-left bottom-right format (from top-right to bottom-left)', () => {
@@ -295,7 +295,7 @@ describe('Parser', () => {
         label: 'B$8',
       };
 
-      expect(cb).toHaveBeenCalledWith(startCell, endCell, expect.anything());
+      expect(cb).toHaveBeenCalledWith(startCell, endCell, void 0, expect.anything());
     });
   });
 

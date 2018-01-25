@@ -110,6 +110,32 @@ describe('.extractLabel()', () => {
     expect(extractLabel(null)).toMatchObject([]);
     expect(extractLabel(void 0)).toMatchObject([]);
     expect(extractLabel(0)).toMatchObject([]);
+    expect(extractLabel('mytab!AG199')).toMatchObject([
+      {
+        index: 198,
+        label: '199',
+        isAbsolute: false,
+      },
+      {
+        index: 32,
+        label: 'AG',
+        isAbsolute: false,
+      },
+      'mytab',
+    ]);
+    expect(extractLabel("'my tab here!'!AG199")).toMatchObject([
+      {
+        index: 198,
+        label: '199',
+        isAbsolute: false,
+      },
+      {
+        index: 32,
+        label: 'AG',
+        isAbsolute: false,
+      },
+      'my tab here!',
+    ]);
   });
 });
 

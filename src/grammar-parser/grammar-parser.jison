@@ -3,14 +3,14 @@
 %lex
 %%
 \s+                                                                                             {/* skip whitespace */}
-'"'("\\"["]|[^"])*'"'                                                                           {return 'STRING';}
-"'"('\\'[']|[^'])*"'"                                                                           {return 'STRING';}
 [A-Za-z]{1,}[A-Za-z_0-9\.]+(?=[(])                                                              {return 'FUNCTION';}
 '#'[A-Z0-9\/]+('!'|'?')?                                                                        {return 'ERROR';}
-'$'[A-Za-z]+'$'[0-9]+                                                                           {return 'ABSOLUTE_CELL';}
-'$'[A-Za-z]+[0-9]+                                                                              {return 'MIXED_CELL';}
-[A-Za-z]+'$'[0-9]+                                                                              {return 'MIXED_CELL';}
-[A-Za-z]+[0-9]+                                                                                 {return 'RELATIVE_CELL';}
+("'"[^']+"'!"|[A-Za-z_\-][A-Za-z0-9_\-]*'!')?'$'[A-Za-z]+'$'[0-9]+                              {return 'ABSOLUTE_CELL';}
+("'"[^']+"'!"|[A-Za-z_\-][A-Za-z0-9_\-]*'!')?'$'[A-Za-z]+[0-9]+                                 {return 'MIXED_CELL';}
+("'"[^']+"'!"|[A-Za-z_\-][A-Za-z0-9_\-]*'!')?[A-Za-z]+'$'[0-9]+                                 {return 'MIXED_CELL';}
+("'"[^']+"'!"|[A-Za-z_\-][A-Za-z0-9_\-]*'!')?[A-Za-z]+[0-9]+                                    {return 'RELATIVE_CELL';}
+'"'("\\"["]|[^"])*'"'                                                                           {return 'STRING';}
+"'"('\\'[']|[^'])*"'"                                                                           {return 'STRING';}
 [A-Za-z\.]+(?=[(])                                                                              {return 'FUNCTION';}
 [A-Za-z]{1,}[A-Za-z_0-9]+                                                                       {return 'VARIABLE';}
 [A-Za-z_]+                                                                                      {return 'VARIABLE';}
@@ -63,7 +63,8 @@ expressions
 ;
 
 expression
-  : variableSequence {
+  : cell
+  | variableSequence {
       $$ = yy.callVariable($1[0]);
     }
   | number {
@@ -138,7 +139,6 @@ expression
   | FUNCTION '(' expseq ')' {
       $$ = yy.callFunction($1, $3);
     }
-  | cell
   | error
   | error error
 ;

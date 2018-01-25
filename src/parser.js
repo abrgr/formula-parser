@@ -172,12 +172,10 @@ class Parser extends Emitter {
    * @private
    */
   _callCellValue(label) {
-    label = label.toUpperCase();
-
-    const [row, column] = extractLabel(label);
+    const [row, column, tab] = extractLabel(label);
     let value = void 0;
 
-    this.emit('callCellValue', {label, row, column}, (_value) => {
+    this.emit('callCellValue', {label: toLabel(row, column, tab), row, column, tab}, (_value) => {
       value = _value;
     });
 
@@ -193,10 +191,7 @@ class Parser extends Emitter {
    * @private
    */
   _callRangeValue(startLabel, endLabel) {
-    startLabel = startLabel.toUpperCase();
-    endLabel = endLabel.toUpperCase();
-
-    const [startRow, startColumn] = extractLabel(startLabel);
+    const [startRow, startColumn, tab] = extractLabel(startLabel);
     const [endRow, endColumn] = extractLabel(endLabel);
     let startCell = {};
     let endCell = {};
@@ -217,12 +212,12 @@ class Parser extends Emitter {
       endCell.column = startColumn;
     }
 
-    startCell.label = toLabel(startCell.row, startCell.column);
-    endCell.label = toLabel(endCell.row, endCell.column);
+    startCell.label = toLabel(startCell.row, startCell.column, tab);
+    endCell.label = toLabel(endCell.row, endCell.column, tab);
 
     let value = [];
 
-    this.emit('callRangeValue', startCell, endCell, (_value = []) => {
+    this.emit('callRangeValue', startCell, endCell, tab, (_value = []) => {
       value = _value;
     });
 

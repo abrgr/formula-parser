@@ -84,7 +84,7 @@ describe('.parse() financial formulas', () => {
   });
 
   it('FVSCHEDULE', () => {
-    parser.on('callRangeValue', (a, b, done) => done([[0.09, 0.1, 0.11]]));
+    parser.on('callRangeValue', (a, b, _, done) => done([[0.09, 0.1, 0.11]]));
 
     expect(parser.parse('FVSCHEDULE(100, A1:C1)')).toMatchObject({error: null, result: 133.08900000000003});
   });
@@ -99,7 +99,7 @@ describe('.parse() financial formulas', () => {
   });
 
   it('IRR', () => {
-    parser.on('callRangeValue', (a, b, done) => done([[-75000, 12000, 15000, 18000, 21000, 24000]]));
+    parser.on('callRangeValue', (a, b, _, done) => done([[-75000, 12000, 15000, 18000, 21000, 24000]]));
 
     expect(parser.parse('IRR(A1:C1)')).toMatchObject({error: null, result: 0.05715142887178453});
   });
@@ -113,7 +113,7 @@ describe('.parse() financial formulas', () => {
   });
 
   it('MIRR', () => {
-    parser.on('callRangeValue', (a, b, done) => done([[-75000, 12000, 15000, 18000, 21000, 24000]]));
+    parser.on('callRangeValue', (a, b, _, done) => done([[-75000, 12000, 15000, 18000, 21000, 24000]]));
 
     expect(parser.parse('MIRR(A1:C1, 0.1, 0.12)')).toBeMatchCloseTo({error: null, result: 0.07971710360838036});
   });
@@ -229,7 +229,7 @@ describe('.parse() financial formulas', () => {
 
   // TODO: Not supported yet
   xit('XIRR', () => {
-    parser.on('callRangeValue', (a, b, done) => {
+    parser.on('callRangeValue', (a, b, _, done) => {
       let values;
 
       if (a.label === 'A1' && b.label === 'C1') {
@@ -246,7 +246,7 @@ describe('.parse() financial formulas', () => {
   });
 
   it('XNPV', () => {
-    parser.on('callRangeValue', (a, b, done) => {
+    parser.on('callRangeValue', (a, b, _, done) => {
       let values;
 
       if (a.label === 'A1' && b.label === 'C1') {

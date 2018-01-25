@@ -5,6 +5,7 @@ describe('.parse() coordinates', () => {
   let cellCoord;
   let startCellCoord;
   let endCellCoord;
+  let rangeTab;
 
   beforeEach(() => {
     parser = new Parser();
@@ -13,9 +14,10 @@ describe('.parse() coordinates', () => {
       cellCoord = _cellCoord;
       done(55);
     });
-    parser.on('callRangeValue', (_startCellCoord, _endCellCoord, done) => {
+    parser.on('callRangeValue', (_startCellCoord, _endCellCoord, _tab, done) => {
       startCellCoord = _startCellCoord;
       endCellCoord = _endCellCoord;
+      rangeTab = _tab;
       done([[3, 6, 10]]);
     });
   });
@@ -42,6 +44,24 @@ describe('.parse() coordinates', () => {
     });
   });
 
+  it('should parse relative cell with tab reference', () => {
+    expect(parser.parse('my-tab!A1')).toMatchObject({error: null, result: 55});
+    expect(cellCoord).toMatchObject({
+      label: "'my-tab'!A1",
+      row: {index: 0, isAbsolute: false, label: '1'},
+      column: {index: 0, isAbsolute: false, label: 'A'},
+      tab: 'my-tab',
+    });
+
+    expect(parser.parse("'my tab'!a1")).toMatchObject({error: null, result: 55});
+    expect(cellCoord).toMatchObject({
+      label: "'my tab'!A1",
+      row: {index: 0, isAbsolute: false, label: '1'},
+      column: {index: 0, isAbsolute: false, label: 'A'},
+      tab: 'my tab',
+    });
+  });
+
   it('should parse absolute cell', () => {
     expect(parser.parse('$A$1')).toMatchObject({error: null, result: 55});
     expect(cellCoord).toMatchObject({
@@ -59,6 +79,24 @@ describe('.parse() coordinates', () => {
 
     expect(parser.parse('$A$$$$1')).toMatchObject({error: '#ERROR!', result: null});
     expect(parser.parse('$$A$1')).toMatchObject({error: '#ERROR!', result: null});
+  });
+
+  it('should parse absolute cell with tab reference', () => {
+    expect(parser.parse('my-tab!$A$1')).toMatchObject({error: null, result: 55});
+    expect(cellCoord).toMatchObject({
+      label: "'my-tab'!$A$1",
+      row: {index: 0, isAbsolute: true, label: '1'},
+      column: {index: 0, isAbsolute: true, label: 'A'},
+      tab: 'my-tab',
+    });
+
+    expect(parser.parse("'my tab'!$a$1")).toMatchObject({error: null, result: 55});
+    expect(cellCoord).toMatchObject({
+      label: "'my tab'!$A$1",
+      row: {index: 0, isAbsolute: true, label: '1'},
+      column: {index: 0, isAbsolute: true, label: 'A'},
+      tab: 'my tab',
+    });
   });
 
   it('should parse mixed cell', () => {
@@ -88,6 +126,24 @@ describe('.parse() coordinates', () => {
     expect(parser.parse('A1$')).toMatchObject({error: '#ERROR!', result: null});
     expect(parser.parse('A1$$$')).toMatchObject({error: '#ERROR!', result: null});
     expect(parser.parse('a1$$$')).toMatchObject({error: '#ERROR!', result: null});
+  });
+
+  it('should parse mixed cell with tab reference', () => {
+    expect(parser.parse('my-tab!$A1')).toMatchObject({error: null, result: 55});
+    expect(cellCoord).toMatchObject({
+      label: "'my-tab'!$A1",
+      row: {index: 0, isAbsolute: false, label: '1'},
+      column: {index: 0, isAbsolute: true, label: 'A'},
+      tab: 'my-tab',
+    });
+
+    expect(parser.parse("'my tab'!a$1")).toMatchObject({error: null, result: 55});
+    expect(cellCoord).toMatchObject({
+      label: "'my tab'!A$1",
+      row: {index: 0, isAbsolute: true, label: '1'},
+      column: {index: 0, isAbsolute: false, label: 'A'},
+      tab: 'my tab',
+    });
   });
 
   it('should parse relative cells range', () => {
@@ -140,6 +196,21 @@ describe('.parse() coordinates', () => {
     });
   });
 
+  it('should parse relative cells range with tab reference', () => {
+    expect(parser.parse("'my tab'!A1:B2")).toMatchObject({error: null, result: [[3, 6, 10]]});
+    expect(startCellCoord).toMatchObject({
+      label: "'my tab'!A1",
+      row: {index: 0, isAbsolute: false, label: '1'},
+      column: {index: 0, isAbsolute: false, label: 'A'},
+    });
+    expect(endCellCoord).toMatchObject({
+      label: "'my tab'!B2",
+      row: {index: 1, isAbsolute: false, label: '2'},
+      column: {index: 1, isAbsolute: false, label: 'B'},
+    });
+    expect(rangeTab).toEqual('my tab');
+  });
+
   it('should parse absolute cells range', () => {
     expect(parser.parse('$A$1:$B$2')).toMatchObject({error: null, result: [[3, 6, 10]]});
     expect(startCellCoord).toMatchObject({
@@ -181,6 +252,21 @@ describe('.parse() coordinates', () => {
     expect(parser.parse('$A$1:$B$$2')).toMatchObject({error: '#ERROR!', result: null});
     expect(parser.parse('$A$1:$$B$2')).toMatchObject({error: '#ERROR!', result: null});
     expect(parser.parse('$$A$1:$B$2')).toMatchObject({error: '#ERROR!', result: null});
+  });
+
+  it('should parse absolute cells range with tab reference', () => {
+    expect(parser.parse("'my tab'!$A$1:$B$2")).toMatchObject({error: null, result: [[3, 6, 10]]});
+    expect(startCellCoord).toMatchObject({
+      label: "'my tab'!$A$1",
+      row: {index: 0, isAbsolute: true, label: '1'},
+      column: {index: 0, isAbsolute: true, label: 'A'},
+    });
+    expect(endCellCoord).toMatchObject({
+      label: "'my tab'!$B$2",
+      row: {index: 1, isAbsolute: true, label: '2'},
+      column: {index: 1, isAbsolute: true, label: 'B'},
+    });
+    expect(rangeTab).toEqual('my tab');
   });
 
   it('should parse mixed cells range', () => {
@@ -296,5 +382,20 @@ describe('.parse() coordinates', () => {
     expect(parser.parse('A1:B2$')).toMatchObject({error: '#ERROR!', result: null});
     expect(parser.parse('a1:b2$')).toMatchObject({error: '#ERROR!', result: null});
     expect(parser.parse('A1$:B2')).toMatchObject({error: '#ERROR!', result: null});
+  });
+
+  it('should parse mixed cells range with tab reference', () => {
+    expect(parser.parse("'my tab'!$A1:B$2")).toMatchObject({error: null, result: [[3, 6, 10]]});
+    expect(startCellCoord).toMatchObject({
+      label: "'my tab'!$A1",
+      row: {index: 0, isAbsolute: false, label: '1'},
+      column: {index: 0, isAbsolute: true, label: 'A'},
+    });
+    expect(endCellCoord).toMatchObject({
+      label: "'my tab'!B$2",
+      row: {index: 1, isAbsolute: true, label: '2'},
+      column: {index: 1, isAbsolute: false, label: 'B'},
+    });
+    expect(rangeTab).toEqual('my tab');
   });
 });
