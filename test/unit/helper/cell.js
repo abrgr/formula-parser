@@ -123,7 +123,7 @@ describe('.extractLabel()', () => {
       },
       'mytab',
     ]);
-    expect(extractLabel("'my tab here!'!AG199")).toMatchObject([
+    expect(extractLabel('\'my tab here!\'!AG199')).toMatchObject([
       {
         index: 198,
         label: '199',

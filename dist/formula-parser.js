@@ -396,7 +396,7 @@ var errors = (_errors = {}, _errors[ERROR] = '#ERROR!', _errors[ERROR_DIV_ZERO] 
 function error(type) {
   var result = void 0;
 
-  type = (type + '').replace(/#|!|\?/g, '');
+  type = ('' + type).replace(/#|!|\?/g, '');
 
   if (errors[type]) {
     result = errors[type];
@@ -12397,7 +12397,7 @@ function columnIndexToLabel(column) {
   return result.toUpperCase();
 }
 
-var LABEL_EXTRACT_REGEXP = /^(['][^']+[']|[A-Za-z_\-][A-Za-z0-9_\-]*)?[!]?([$])?([A-Za-z]+)([$])?([0-9]+)$/;
+var LABEL_EXTRACT_REGEXP = /^(['][^']+['][!]|[A-Za-z_-][A-Za-z0-9_-]*[!])?([$])?([A-Za-z]+)([$])?([0-9]+)$/;
 
 /**
  * Extract cell coordinates.
@@ -12427,7 +12427,7 @@ function extractLabel(label) {
     isAbsolute: columnAbs === '$'
   }];
 
-  return tabRef ? ret.concat([tabRef.replace(/^[']|[']$/g, '')]) : ret;
+  return tabRef ? ret.concat([tabRef.replace(/^[']|[']?[!]$/g, '')]) : ret;
 }
 
 /**
@@ -12443,7 +12443,7 @@ function toLabel(row, column, tab) {
   var columnLabel = (column.isAbsolute ? '$' : '') + columnIndexToLabel(column.index);
   var label = columnLabel + rowLabel;
 
-  return tab ? "'" + tab + "'!" + label : label;
+  return tab ? '\'' + tab + '\'!' + label : label;
 }
 
 /***/ }),

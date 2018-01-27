@@ -73,7 +73,7 @@ export function columnIndexToLabel(column) {
   return result.toUpperCase();
 }
 
-const LABEL_EXTRACT_REGEXP = /^(['][^']+[']|[A-Za-z_\-][A-Za-z0-9_\-]*)?[!]?([$])?([A-Za-z]+)([$])?([0-9]+)$/;
+const LABEL_EXTRACT_REGEXP = /^(['][^']+['][!]|[A-Za-z_-][A-Za-z0-9_-]*[!])?([$])?([A-Za-z]+)([$])?([0-9]+)$/;
 
 /**
  * Extract cell coordinates.
@@ -100,7 +100,7 @@ export function extractLabel(label) {
     },
   ];
 
-  return tabRef ? ret.concat([tabRef.replace(/^[']|[']$/g, '')]) : ret;
+  return tabRef ? ret.concat([tabRef.replace(/^[']|[']?[!]$/g, '')]) : ret;
 }
 
 /**
@@ -116,5 +116,5 @@ export function toLabel(row, column, tab) {
   const columnLabel = (column.isAbsolute ? '$' : '') + columnIndexToLabel(column.index);
   const label = columnLabel + rowLabel;
 
-  return tab ? "'" + tab + "'!" + label : label;
+  return tab ? `'${tab}'!${label}` : label;
 }
