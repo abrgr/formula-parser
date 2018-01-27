@@ -12435,6 +12435,7 @@ function extractLabel(label) {
  *
  * @param {Object} row Object with `index` and `isAbsolute` properties.
  * @param {Object} column Object with `index` and `isAbsolute` properties.
+ * @param {String} optional tab identifier
  * @returns {String} Returns cell label.
  */
 function toLabel(row, column, tab) {
