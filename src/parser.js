@@ -193,8 +193,8 @@ class Parser extends Emitter {
   _callRangeValue(startLabel, endLabel) {
     const [startRow, startColumn, tab] = extractLabel(startLabel);
     const [endRow, endColumn] = extractLabel(endLabel);
-    let startCell = {};
-    let endCell = {};
+    let startCell = {tab};
+    let endCell = {tab};
 
     if (startRow.index <= endRow.index) {
       startCell.row = startRow;

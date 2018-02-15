@@ -12758,8 +12758,8 @@ var Parser = function (_Emitter) {
         endRow = _extractLabel3[0],
         endColumn = _extractLabel3[1];
 
-    var startCell = {};
-    var endCell = {};
+    var startCell = { tab: tab };
+    var endCell = { tab: tab };
 
     if (startRow.index <= endRow.index) {
       startCell.row = startRow;
